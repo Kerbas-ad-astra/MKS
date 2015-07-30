@@ -13,9 +13,11 @@ namespace KolonyTools
         [KSPField]
         public string ResourceName = "Recyclables";
 
+        [KSPField]
+        public string Menu = "Scrap Part";
+        
         [KSPField] 
         public float Efficiency = 0.8f;
-
         
         [KSPEvent(active = true, guiActiveUnfocused = true, externalToEVAOnly = true, guiName = "Scrap part",
             unfocusedRange = 5f)]
@@ -30,7 +32,7 @@ namespace KolonyTools
             }
             if (kerbal.experienceTrait.Title != "Engineer")
             {
-                ScreenMessages.PostScreenMessage("Only Engineers can disassemble part s into scrap!", 5f,
+                ScreenMessages.PostScreenMessage("Only Engineers can disassemble parts!", 5f,
                     ScreenMessageStyle.UPPER_CENTER);
                 return;
             }
@@ -48,12 +50,13 @@ namespace KolonyTools
         public override void OnStart(StartState state)
         {
             Events["ScrapPart"].unfocusedRange = EVARange;
+            Events["ScrapPart"].guiName = Menu;
             base.OnStart(state);
         }
 
         private void PushResources(string resourceName, double amount)
         {
-            var vessels = ProxyLogistics.GetNearbyVessels(2000, true, vessel, false);
+            var vessels = LogisticsTools.GetNearbyVessels(2000, true, vessel, false);
             foreach (var v in vessels)
             {
                 //Put recycled stuff into recycleable places
